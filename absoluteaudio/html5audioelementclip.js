@@ -27,6 +27,7 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
         this.loop = false;
         this.onComplete = null;
         this.paused = true;
+        this.offset = 0;
 
         this.load(url, onReady);
     };
@@ -40,6 +41,10 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
         }.bind(this), false);
 
         this.audioElement.src = this.url;
+    };
+
+    AudioClip.prototype.seek = function (offset) {
+        this.offset = offset;
     };
 
     HTML5AudioClip.prototype.play = function (delay, loop, onComplete) {
@@ -65,7 +70,7 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
                         this.paused = false;
                         if (loop) {
                             this.audioElement.pause();
-                            this.audioElement.currentTime = 0;
+                            this.audioElement.currentTime = this.offset;
                             this.play(delay, loop, onComplete);
                         }
                         else {
@@ -84,7 +89,7 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
                 requestAnimationFrame(checkComplete);
             }
 
-            this.audioElement.currentTime = 0;
+            this.audioElement.currentTime = this.offset;
             this.audioElement.play();
 
         }
@@ -114,7 +119,7 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
                     this.loopTimer = null;
                 }
                 this.audioElement.pause();
-                this.audioElement.currentTime = 0;
+                this.audioElement.currentTime = this.offset;
             }
         }
         catch (e) {}
@@ -141,7 +146,7 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
     HTML5AudioClip.prototype.mute = function () {
         this.muted = true;
         if (this.audioElement) {
-            this.audioElement.volume = 0;
+            //this.audioElement.volume = 0;
             if (muteBroken && !this.paused) {   // workaround for mute on iOS Safari
                 this._actualPause();
             }
@@ -155,7 +160,7 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
                 this.muted = false;
                 this.play(this.delay, this.loop, this.onComplete);
             }
-            this.audioElement.volume = this.volume;
+            //this.audioElement.volume = this.volume;
         }
         this.muted = false;
     };

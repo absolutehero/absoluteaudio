@@ -3,8 +3,8 @@
  * Date: 7/18/13
  * Time: 9:35 PM
  */
-define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'absoluteaudio/html5audioelementclip'],
-    function (WebAudioClip, StreamedWebAudioClip, HTML5AudioClip) {
+define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'absoluteaudio/html5audioelementclip', 'absoluteaudio/audiosprite'],
+    function (WebAudioClip, StreamedWebAudioClip, HTML5AudioClip, AudioSprite) {
     "use strict";
 
     var audioContext = null;
@@ -15,10 +15,10 @@ define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'abs
         audioContext = new webkitAudioContext();
     }
 
-        //audioContext = null;
+    //audioContext = null;
 
     var AbsoluteAudio =  {
-        createAudioClip: function (url, onLoaded, stream, duration) {
+        createAudioClip: function (url, onLoaded, stream, duration, sprite) {
             if (audioContext !== null) {
 
                 if (!!stream) {
@@ -31,6 +31,10 @@ define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'abs
             else {
                 return new HTML5AudioClip(url, onLoaded, duration);
             }
+        },
+
+        createAudioSprite: function (baseClip, start, end) {
+            return new AudioSprite(baseClip, start, end);
         },
 
         usingWebAudio: function () {

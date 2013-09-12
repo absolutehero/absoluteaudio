@@ -21,6 +21,10 @@ define(function () {
 
     };
 
+    AudioClip.prototype.seek = function (offset) {
+
+    };
+
     AudioClip.prototype.play = function (delay, loop, onComplete) {
 
     };

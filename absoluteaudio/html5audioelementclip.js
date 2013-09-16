@@ -34,10 +34,21 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
 
     HTML5AudioClip.prototype.load = function (url, onReady) {
         this.audioElement = new Audio();
-        this.audioElement.addEventListener("loadstart", function () {
-            if (onReady && typeof onReady === 'function') {
+
+        var tryCount = 0,
+            maxTries = 4;
+        var checkLoaded = function () {
+            if (this.audioElement.readyState === 4 || tryCount++ > maxTries) {
                 onReady();
             }
+            else {
+                setTimeout(checkLoaded, 250);
+            }
+        }.bind(this);
+
+
+        this.audioElement.addEventListener("loadstart", function () {
+            checkLoaded();
         }.bind(this), false);
 
         this.audioElement.src = this.url;

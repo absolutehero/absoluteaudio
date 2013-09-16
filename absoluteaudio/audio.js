@@ -13,6 +13,8 @@ define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'abs
         audioContext = new AudioContext();
     } else if (typeof webkitAudioContext !== 'undefined') {
         audioContext = new webkitAudioContext();
+    } else if (typeof mozAudioContext !== 'undefined') {
+        audioContext = new mozAudioContext();
     }
 
     //audioContext = null;

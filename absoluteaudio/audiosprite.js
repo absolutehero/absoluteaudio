@@ -16,6 +16,8 @@ define(function () {
         this.start = start;
         this.end = end;
         this.cancelled = false;
+        this.muted = false;
+        this.paused = true;
     };
 
     AudioSprite.prototype.seek = function (offset) {
@@ -23,6 +25,9 @@ define(function () {
     };
 
     AudioSprite.prototype.play = function (delay, loop, onComplete) {
+        this.delay = delay;
+        this.loop = loop;
+        this.onComplete = onComplete;
         var _delay = delay || 0;
 
         if (this.muted) {
@@ -30,23 +35,36 @@ define(function () {
         }
 
         var doPlay = function () {
-            console.log('audio sprite: seek to ' + this.start);
-            this.baseClip.audioElement.currentTime = this.start;
-            console.log('audio sprite: play');
-            if (this !== currentClip) {
-                if (currentClip) {
-                    currentClip.cancelled = true;
+
+            try {
+                this.baseClip.audioElement.pause();
+                this.paused = true;
+
+
+                this.baseClip.audioElement.currentTime = this.start;
+
+
+                if (this !== currentClip) {
+                    if (currentClip) {
+                        currentClip.cancelled = true;
+                    }
+                    currentClip = this;
+                    this.cancelled = false;
                 }
-                currentClip = this;
-                this.cancelled = false;
+                this.paused = false;
+                this.baseClip.audioElement.play();
             }
-            this.baseClip.audioElement.play();
+            catch (e) {
+                //    alert('AudioSprite: audioElement.currentTime '  + e);
+            }
+
             requestAnimationFrame(checkComplete);
+            //setTimeout(checkComplete, 10);
         }.bind(this);
 
         var checkComplete = function() {
             if (this.cancelled) {
-                console.log('cancelled');
+
                 return;
             }
 
@@ -61,11 +79,11 @@ define(function () {
                     if (onComplete && typeof onComplete === 'function') {
                         onComplete();
                     }
-                    console.log('audio sprite: stop at ' + this.end);
                 }
             }
             else if (!this.baseClip.audioElement.paused) {
                 requestAnimationFrame(checkComplete);
+                //setTimeout(checkComplete, 10);
             }
         }.bind(this);
 
@@ -96,13 +114,19 @@ define(function () {
     };
 
     AudioSprite.prototype.mute = function () {
+
+        if (!this.paused && !this.cancelled) {
+            this.baseClip.audioElement.pause();
+        }
         this.muted = true;
         this.cancelled = true;
-        this.baseClip.audioElement.pause();
     };
 
     AudioSprite.prototype.unmute = function () {
         this.muted = false;
+        if (!this.paused) {
+            this.play(this.delay, this.loop, this.onComplete);
+        }
     };
 
     AudioSprite.prototype.isMuted = function () {
@@ -110,7 +134,7 @@ define(function () {
     };
 
     AudioSprite.prototype.prime = function () {
-        this.baseClip.prime();
+        //this.baseClip.prime();
     };
 
     return AudioSprite;

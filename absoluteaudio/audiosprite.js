@@ -81,7 +81,7 @@ define(function () {
                     }
                 }
             }
-            else if (!this.baseClip.audioElement.paused) {
+            else if (!this.paused) {
                 requestAnimationFrame(checkComplete);
                 //setTimeout(checkComplete, 10);
             }

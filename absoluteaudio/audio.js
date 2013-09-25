@@ -3,8 +3,8 @@
  * Date: 7/18/13
  * Time: 9:35 PM
  */
-define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'absoluteaudio/html5audioelementclip', 'absoluteaudio/audiosprite'],
-    function (WebAudioClip, StreamedWebAudioClip, HTML5AudioClip, AudioSprite) {
+define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'absoluteaudio/html5audioelementclip', 'absoluteaudio/audiosprite', 'absoluteaudio/cordovaclip'],
+    function (WebAudioClip, StreamedWebAudioClip, HTML5AudioClip, AudioSprite, CordovaClip) {
     "use strict";
 
     var audioContext = null;
@@ -20,7 +20,7 @@ define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'abs
     //audioContext = null;
 
     var AbsoluteAudio =  {
-        createAudioClip: function (url, onLoaded, stream, duration, sprite) {
+        createAudioClip: function (url, onLoaded, stream, duration) {
             if (audioContext !== null) {
 
                 if (!!stream) {
@@ -29,6 +29,9 @@ define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'abs
                 else {
                     return new WebAudioClip(url, onLoaded, audioContext);
                 }
+            }
+            else if (typeof Media !== 'undefined') {
+                return new CordovaClip(url, onLoaded);
             }
             else {
                 return new HTML5AudioClip(url, onLoaded, duration);
@@ -41,6 +44,10 @@ define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'abs
 
         usingWebAudio: function () {
             return audioContext !== null;
+        },
+
+        usingCordovaAudio: function () {
+            return typeof Media !== 'undefined';
         }
     };
 

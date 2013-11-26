@@ -56,7 +56,12 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
         }
 
         this.sourceNode = this.audioContext.createBufferSource();
-        this.gainNode = this.audioContext.createGainNode();
+        if (typeof this.audioContext.createGainNode !== "undefined") {
+            this.gainNode = this.audioContext.createGainNode();
+        }
+        else {
+            this.gainNode = this.audioContext.createGain();
+        }
 
         this.sourceNode.loop = loop;
         this.sourceNode.buffer = this.buffer;

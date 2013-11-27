@@ -43,22 +43,36 @@ define(function () {
 
                 this.baseClip.audioElement.currentTime = this.start;
 
+                var checkTime = function () {
+                    this.baseClip.audioElement.currentTime = this.start;
 
-                if (this !== currentClip) {
-                    if (currentClip) {
-                        currentClip.cancelled = true;
+                    if (this.baseClip.audioElement.currentTime !== this.start) {
+                        setTimeout(checkTime, 100);
                     }
-                    currentClip = this;
-                    this.cancelled = false;
-                }
-                this.paused = false;
-                this.baseClip.audioElement.play();
+                    else {
+
+                        if (this !== currentClip) {
+                            if (currentClip) {
+                                currentClip.cancelled = true;
+                            }
+                            currentClip = this;
+                            this.cancelled = false;
+                        }
+                        this.paused = false;
+                        this.baseClip.audioElement.play();
+                        requestAnimationFrame(checkComplete);
+                    }
+
+                }.bind(this);
+
+                checkTime();
+
             }
             catch (e) {
                 //    alert('AudioSprite: audioElement.currentTime '  + e);
             }
 
-            requestAnimationFrame(checkComplete);
+
             //setTimeout(checkComplete, 10);
         }.bind(this);
 

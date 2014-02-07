@@ -37,7 +37,6 @@ define(function () {
         var doPlay = function () {
 
             try {
-                this.baseClip.audioElement.pause();
                 this.paused = true;
 
 
@@ -59,7 +58,10 @@ define(function () {
                             this.cancelled = false;
                         }
                         this.paused = false;
-                        this.baseClip.audioElement.play();
+                        if (this.baseClip.audioElement.paused) {
+                            this.baseClip.audioElement.play();
+                        }
+                        this.baseClip.isSilent = false;
                         requestAnimationFrame(checkComplete);
                     }
 
@@ -89,7 +91,8 @@ define(function () {
                 }
                 else {
                     this.paused = true;
-                    this.baseClip.audioElement.pause();
+                    this.baseClip.playSilent();
+
                     if (onComplete && typeof onComplete === 'function') {
                         onComplete();
                     }
@@ -112,11 +115,12 @@ define(function () {
     };
 
     AudioSprite.prototype.pause = function () {
-        this.baseClip.pause();
+        this.baseClip.playSilent();
     };
 
     AudioSprite.prototype.stop = function () {
-        this.baseClip.stop();
+        this.baseClip.playSilent();
+        this.cancelled = true;
     };
 
     AudioSprite.prototype.setVolume = function (volume) {
@@ -130,7 +134,7 @@ define(function () {
     AudioSprite.prototype.mute = function () {
 
         if (!this.paused && !this.cancelled) {
-            this.baseClip.audioElement.pause();
+            this.baseClip.playSilent();
         }
         this.muted = true;
         this.cancelled = true;

@@ -28,6 +28,7 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
         this.onComplete = null;
         this.paused = true;
         this.offset = 0;
+        this.isSilent = false;
 
         this.load(url, onReady);
     };
@@ -188,6 +189,18 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
         }
     };
 
+    HTML5AudioClip.prototype.playSilent = function () {
+        this.isSilent = true;
+
+        var staySilent = function () {
+            if (this.isSilent) {
+                this.audioElement.currentTime = 1000;
+                setTimeout(staySilent, 500);
+            }
+        }.bind(this);
+
+        staySilent();
+    };
 
     return HTML5AudioClip;
 

@@ -39,7 +39,6 @@ define(function () {
             try {
                 this.paused = true;
 
-
                 this.baseClip.audioElement.currentTime = this.start;
 
                 var checkTime = function () {

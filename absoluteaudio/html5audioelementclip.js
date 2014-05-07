@@ -194,7 +194,11 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
 
         var staySilent = function () {
             if (this.isSilent) {
-                this.audioElement.currentTime = 1000;
+                try {
+                    this.audioElement.currentTime = 1000;
+                }
+                catch (e) {}
+
                 setTimeout(staySilent, 500);
             }
         }.bind(this);

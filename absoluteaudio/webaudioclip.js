@@ -35,12 +35,20 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
         soundRequest.responseType = 'arraybuffer';
 
         soundRequest.onload = function () {
-            this.audioContext.decodeAudioData(soundRequest.response, function (buffer) {
-                this.buffer = buffer;
-                if (onReady && typeof onReady === 'function') {
-                    onReady();
-                }
-            }.bind(this));
+            this.audioContext.decodeAudioData(soundRequest.response,
+                function (buffer) {
+                    this.buffer = buffer;
+                    if (onReady && typeof onReady === 'function') {
+                        onReady();
+                    }
+                }.bind(this),
+                function () {
+                    console.log('error loading audio clip ' + url);
+                    if (onReady && typeof onReady === 'function') {
+                        onReady();
+                    }
+                }.bind(this)
+            );
         }.bind(this);
 
         soundRequest.send();

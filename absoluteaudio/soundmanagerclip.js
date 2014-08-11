@@ -4,7 +4,9 @@
  * Time: 12:48 PM
  * Copyright (c) 2014 Absolute Hero, Inc.
  */
-define(['soundmanager2'], function (soundManager) {
+define(function () {
+
+    // soundManager is a global!
 
     var SoundManagerClip = function (url, onReady) {
         this.init(url, onReady);
@@ -13,7 +15,6 @@ define(['soundmanager2'], function (soundManager) {
     SoundManagerClip.constructor = SoundManagerClip;
 
     SoundManagerClip.prototype.init = function (url, onReady) {
-
         this.load(url, onReady);
     };
 

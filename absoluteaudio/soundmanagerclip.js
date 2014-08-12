@@ -23,7 +23,7 @@ define(function () {
 
         this.sound = soundManager.createSound({
             id: id,
-            url: '/' + url,
+            url: url,
             autoLoad: true,
             onload: function() {
                 onReady();

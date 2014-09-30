@@ -3,7 +3,7 @@
  * Date: 7/18/13
  * Time: 9:54 PM
  */
-define(['absoluteaudio/audioclip'], function (AudioClip) {
+define(['absoluteaudio/audioclip','absolute/debug'], function (AudioClip, Debug) {
 
     var muteBroken = navigator.userAgent.indexOf('iPhone OS') >= 0;
 
@@ -43,7 +43,7 @@ define(['absoluteaudio/audioclip'], function (AudioClip) {
                     }
                 }.bind(this),
                 function () {
-                    console.log('error loading audio clip ' + url);
+                    Debug.log('error loading audio clip ' + url);
                     if (onReady && typeof onReady === 'function') {
                         onReady();
                     }

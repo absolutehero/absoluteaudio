@@ -4,8 +4,8 @@
  * Time: 9:35 PM
  */
 define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'absoluteaudio/html5audioelementclip',
-        'absoluteaudio/audiosprite', 'absoluteaudio/cordovaclip', 'absoluteaudio/soundmanagerclip', 'absoluteaudio/debug'],
-    function (WebAudioClip, StreamedWebAudioClip, HTML5AudioClip, AudioSprite, CordovaClip, SoundManagerClip, Debug) {
+        'absoluteaudio/audiosprite', 'absoluteaudio/cordovaclip', 'absoluteaudio/soundmanagerclip', 'absoluteaudio/debug', 'absolute/platform'],
+    function (WebAudioClip, StreamedWebAudioClip, HTML5AudioClip, AudioSprite, CordovaClip, SoundManagerClip, Debug, Platform) {
     "use strict";
 
     var audioContext = null;
@@ -58,7 +58,7 @@ define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'abs
         },
 
         usingSoundManagerAudio: function () {
-            return typeof soundManager !== 'undefined';
+            return typeof soundManager !== 'undefined' && Platform._isIE();
         }
     };
 

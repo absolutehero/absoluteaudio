@@ -34,7 +34,7 @@ define(['absoluteaudio/webaudioclip', 'absoluteaudio/streamedwebaudioclip', 'abs
                     return new WebAudioClip(url, onLoaded, audioContext);
                 }
             }
-            else if (typeof soundManager !== 'undefined' && (navigator.userAgent.indexOf("Trident") >= 0 || navigator.userAgent.indexOf("MSIE") >= 0)) {
+            else if (typeof soundManager !== 'undefined' && Platform._isIE()) {
                 return new SoundManagerClip(url, onLoaded);
             }
             else if (typeof Media !== 'undefined') {

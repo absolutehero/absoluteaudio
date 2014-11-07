@@ -71,28 +71,35 @@ define(['absoluteaudio/audioclip','absolute/debug'], function (AudioClip, Debug)
             this.gainNode = this.audioContext.createGain();
         }
 
-        this.sourceNode.loop = loop;
-        this.sourceNode.buffer = this.buffer;
-        this.sourceNode.onended = function () {
-            if (onComplete && typeof onComplete === 'function') {
-                onComplete();
+        try {
+            this.sourceNode.loop = loop;
+            this.sourceNode.buffer = this.buffer;
+            this.sourceNode.onended = function () {
+                if (onComplete && typeof onComplete === 'function') {
+                    onComplete();
+                }
+            };
+
+            this.gainNode.gain.value = this.muted ? 0 : this.volume;
+
+            this.sourceNode.connect(this.gainNode);
+            this.gainNode.connect(this.audioContext.destination);
+
+            if (when !== 0) {
+                when += this.audioContext.currentTime;
             }
-        };
 
-        this.gainNode.gain.value = this.muted ? 0 : this.volume;
-
-        this.sourceNode.connect(this.gainNode);
-        this.gainNode.connect(this.audioContext.destination);
-
-        if (when !== 0) {
-            when += this.audioContext.currentTime;
+            if (typeof this.sourceNode.start === 'undefined') {
+                this.sourceNode.noteOn(when);
+            }
+            else {
+                this.sourceNode.start(when, this.offset);
+            }
         }
-
-        if (typeof this.sourceNode.start === 'undefined') {
-            this.sourceNode.noteOn(when);
-        }
-        else {
-            this.sourceNode.start(when, this.offset);
+        catch (e) {
+            if (typeof Raygun !== 'undefined') {
+                Raygun.send(e);
+            }
         }
     };
 

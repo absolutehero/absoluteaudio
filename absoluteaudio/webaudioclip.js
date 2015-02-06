@@ -78,7 +78,10 @@ define(['absoluteaudio/audioclip','absolute/debug'], function (AudioClip, Debug)
                 if (onComplete && typeof onComplete === 'function') {
                     onComplete();
                 }
-            };
+                // clean up 
+                this.sourceNode = null;
+                this.gainNode = null;
+            }.bind(this);
 
             this.gainNode.gain.value = this.muted ? 0 : this.volume;
 

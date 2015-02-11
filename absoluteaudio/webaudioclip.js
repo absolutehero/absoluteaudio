@@ -5,7 +5,8 @@
  */
 define(['absoluteaudio/audioclip','absolute/debug'], function (AudioClip, Debug) {
 
-    var muteBroken = navigator.userAgent.indexOf('iPhone OS') >= 0;
+    //var muteBroken = navigator.userAgent.indexOf('iPhone OS') >= 0;
+    var muteBroken = false; // @jarbot: this seems to breaking ios now. disabling this fix for now.
 
     var WebAudioClip = function (url, onReady, audioContext) {
         this.init(url, onReady, audioContext);
